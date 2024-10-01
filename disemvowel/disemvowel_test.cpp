@@ -2,26 +2,30 @@
 
 #include "disemvowel.h"
 
+void assert_removeVowels(const char* input, const char* expected) {
+  char* result = disemvowel((char*)input);
+  ASSERT_STREQ(expected, result);
+  free(result);
+}
+
 TEST(Disemvowel, HandleEmptyString) {
-  ASSERT_STREQ("", disemvowel((char*) ""));
+  assert_removeVowels("", "");
 }
 
 TEST(Disemvowel, HandleNoVowels) {
-  ASSERT_STREQ("pqrst", disemvowel((char*) "pqrst"));
+  assert_removeVowels("pqrst", "pqrst");
 }
 
 TEST(Disemvowel, HandleOnlyVowels) {
-  ASSERT_STREQ("", disemvowel((char*) "aeiouAEIOUOIEAuoiea"));
+  assert_removeVowels("aeiouAEIOUOIEAuoiea", "");
 }
 
 TEST(Disemvowel, HandleMorrisMinnesota) {
-  ASSERT_STREQ("Mrrs, Mnnst",
-		      disemvowel((char*) "Morris, Minnesota"));
+  assert_removeVowels("Morris, Minnesota", "Mrrs, Mnnst");
 }
 
 TEST(Disemvowel, HandlePunctuation) {
-  ASSERT_STREQ("n (nxplnd) lphnt!", 
-		      disemvowel((char*) "An (Unexplained) Elephant!"));
+  assert_removeVowels("An (Unexplained) Elephant!", "n (nxplnd) lphnt!");
 }
 
 TEST(Disemvowel, HandleLongString) {
@@ -39,7 +43,7 @@ TEST(Disemvowel, HandleLongString) {
   }
   str[size-1] = '\0';
   
-  ASSERT_STREQ("xyz", disemvowel(str));
+  assert_removeVowels(str, "xyz");
 
   free(str);
 }
